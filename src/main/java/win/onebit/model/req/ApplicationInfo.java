@@ -1,33 +1,32 @@
 
-package win.onebit.model;
-
-import com.google.gson.annotations.SerializedName;
+package win.onebit.model.req;
 
 import javax.annotation.Generated;
+import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class ApplicationInfo {
 
     @SerializedName("application_id")
-    private String mApplicationId;
+    private String ApplicationId;
     @SerializedName("application_name")
-    private String mApplicationName;
+    private String ApplicationName;
 
     public String getApplicationId() {
-        return mApplicationId;
+        return ApplicationId;
     }
 
     public void setApplicationId(String applicationId) {
-        mApplicationId = applicationId;
+        ApplicationId = applicationId;
     }
 
     public String getApplicationName() {
-        return mApplicationName;
+        return ApplicationName;
     }
 
     public void setApplicationName(String applicationName) {
-        mApplicationName = applicationName;
+        ApplicationName = applicationName;
     }
 
 }

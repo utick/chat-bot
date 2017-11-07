@@ -1,5 +1,5 @@
 
-package win.onebit.model;
+package win.onebit.model.req;
 
 import javax.annotation.Generated;
 

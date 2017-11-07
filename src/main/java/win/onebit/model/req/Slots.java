@@ -1,32 +1,33 @@
 
-package win.onebit.model;
+package win.onebit.model.req;
+
+import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
-import com.google.gson.annotations.SerializedName;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class Slots {
 
     @SerializedName("bizname")
-    private String mBizname;
+    private String Bizname;
     @SerializedName("type")
-    private String mType;
+    private String Type;
 
     public String getBizname() {
-        return mBizname;
+        return Bizname;
     }
 
     public void setBizname(String bizname) {
-        mBizname = bizname;
+        Bizname = bizname;
     }
 
     public String getType() {
-        return mType;
+        return Type;
     }
 
     public void setType(String type) {
-        mType = type;
+        Type = type;
     }
 
 }
