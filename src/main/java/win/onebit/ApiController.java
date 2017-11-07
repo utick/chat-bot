@@ -2,12 +2,17 @@ package win.onebit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import win.onebit.model.req.CommandReq;
+import win.onebit.model.req.TuLingReq;
 import win.onebit.model.resp.Card;
 import win.onebit.model.resp.CommandResp;
 import win.onebit.model.resp.Directive;
@@ -59,13 +64,38 @@ public class ApiController {
         return mapper.readValue(answerJson, Object.class);
     }
 
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
+    private OkHttpClient client = new OkHttpClient();
+
+    String post(String url, String json) throws IOException {
+        okhttp3.RequestBody body = okhttp3.RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    public static final String API_URL = "http://www.tuling123.com/openapi/api";
+    public static final String API_KEY = "364b290940664e55b660d67ec1cd13fb";
+
+    public String talk(String question) throws IOException {
+        TuLingReq tuLingReq = TuLingReq.builder().info(question).key(API_KEY).build();
+        String result = post(API_URL, mapper.writeValueAsString(tuLingReq));
+        return result;
+    }
+
+    public static final ObjectMapper mapper = new ObjectMapper();
+
     public static void main(String[] args) throws IOException {
         Gson gson = new Gson();
         String s = "{\"versionid\":\"1.0\",\"status\":\"NOTICE\",\"sequence\":\"7e11772de96e46088082d0e8ede9943b\",\"timestamp\":1510035523526,\"application_info\":{\"application_id\":\"33weu086\",\"application_name\":\"xiao_nan\",\"application_version\":\"10000\"},\"session\":{\"is_new\":true,\"session_id\":\"d52faf3698b14bd1aae7d6783010a4b1\",\"attributes\":{}},\"user\":{\"user_id\":\"9255113cb6434e88b7997d105fa3e70d\",\"attributes\":{}},\"input_text\":\"跟小南说你好。\",\"notice_type\":\"DEV_SERVICE_RESP_PACK_ERROR\",\"extend\":{}}";
         String s2 = "{\"versionid\":\"1.0\",\"status\":\"INTENT\",\"sequence\":\"0c70c1bff06742d385a320eb28eafad6\",\"timestamp\":1510038617188,\"application_info\":{\"application_id\":\"33weu086\",\"application_name\":\"xiao_nan\",\"application_version\":\"10000\"},\"session\":{\"is_new\":true,\"session_id\":\"03f29a79903c438db6171119cc83fa76\",\"attributes\":{\"say_content\":\"对小南说告诉我历史上大灭绝的主要成因\",\"bizname\":\"小南\",\"chat_content\":\"告诉我历史上大灭绝的主要成因\"}},\"user\":{\"user_id\":\"9255113cb6434e88b7997d105fa3e70d\",\"attributes\":{}},\"input_text\":\"对小南说，告诉我历史上大灭绝的主要成因。\",\"slots\":{\"say_content\":\"对小南说告诉我历史上大灭绝的主要成因\",\"bizname\":\"小南\",\"chat_content\":\"告诉我历史上大灭绝的主要成因\"},\"extend\":{}}";
         CommandReq commandReq = gson.fromJson(s2, CommandReq.class);
 
-        ObjectMapper mapper = new ObjectMapper();
         Object o = mapper.readValue(gson.toJson(commandReq), Object.class);
         System.out.println(commandReq.getInputText());
     }
