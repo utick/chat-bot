@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 @Builder
 public class TuLingResp {
-    String key;
-    String info;
-    String userId;
+    String code;
+    String text;
 }
